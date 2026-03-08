@@ -159,9 +159,9 @@ export default function Header({ categories = [] }) {
         <div className="bg-gray-900 text-gray-300 text-xs py-2 hidden md:block">
           <div className="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-6">
             <div className="flex items-center gap-4">
-              <span className="flex items-center gap-2"><FiPhone className="text-brand-red" /> +8801714404100</span>
+              <span className="flex items-center gap-2"><FiPhone className="text-brand-red" /> +8801827595584</span>
               <span className="opacity-30">|</span>
-              <span className="flex items-center gap-2"><FiMapPin className="text-brand-red" /> Level-4, Block-C, Shop #35A, Jamuna Future Park, Dhaka</span>
+              <span className="flex items-center gap-2"><FiMapPin className="text-brand-red" /> BA - 64/3 South Badda, Dhaka - 1212</span>
             </div>
             <div className="flex gap-4 font-medium">
               <Link href="/track-order" className="text-brand-red font-bold hover:text-red-300 transition-colors">Track Order</Link>

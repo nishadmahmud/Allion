@@ -34,7 +34,7 @@ export default function Footer({ categories = [] }) {
                             </p>
                             <p className="flex gap-1 md:gap-2">
                                 <strong className="text-white">Phone:</strong>
-                                <a href="tel:+8801714404100" className="hover:text-white/70 transition-colors">+8801714404100</a>
+                                <a href="tel:+8801827595584" className="hover:text-white/70 transition-colors">+8801827595584</a>
                             </p>
                         </div>
                         <div className="flex gap-3 md:gap-4 mt-1">

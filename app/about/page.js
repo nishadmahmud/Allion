@@ -82,14 +82,14 @@ export default function AboutPage() {
                                 <FiMapPin className="text-brand-red mt-1 flex-shrink-0" size={20} />
                                 <div>
                                     <p className="font-semibold">Address</p>
-                                    <p className="text-white/70 text-sm">Level-4, Block-C, Shop #35A, Jamuna Future Park, Dhaka-1229</p>
+                                    <p className="text-white/70 text-sm">BA - 64/3 South Badda, Dhaka - 1212-1229</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
                                 <FiPhone className="text-brand-red mt-1 flex-shrink-0" size={20} />
                                 <div>
                                     <p className="font-semibold">Phone</p>
-                                    <a href="tel:+8801714404100" className="text-white/70 text-sm hover:text-white">+880 1714-404100</a>
+                                    <a href="tel:+8801827595584" className="text-white/70 text-sm hover:text-white">+880 1714-404100</a>
                                 </div>
                             </div>
                             <div className="flex items-start gap-3">
