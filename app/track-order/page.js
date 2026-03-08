@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { trackOrder } from "@/lib/api";
 import toast from "react-hot-toast";
 import Image from "next/image";
@@ -68,23 +69,22 @@ const OrderTimeline = ({ currentStatus }) => {
     );
 };
 
-export default function TrackOrderPage() {
+function TrackOrderContent() {
+    const searchParams = useSearchParams();
+    const queryInvoiceId = searchParams.get("invoice");
     const [invoiceId, setInvoiceId] = useState("");
     const [orderData, setOrderData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [searched, setSearched] = useState(false);
 
-    const getStatusLabel = (s) => { s = Number(s); if (s === 1) return "Order Received"; if (s === 2) return "Confirmed"; if (s === 3) return "Processing"; if (s === 4) return "Delivered"; if (s === 5) return "Canceled"; if (s === 6) return "On Hold"; return "Pending"; };
-    const getStatusColor = (s) => { s = Number(s); if (s === 1) return "bg-blue-50 text-blue-700 border-blue-200"; if (s === 2) return "bg-indigo-50 text-indigo-700 border-indigo-200"; if (s === 3) return "bg-purple-50 text-purple-700 border-purple-200"; if (s === 4) return "bg-green-50 text-green-700 border-green-200"; if (s === 5) return "bg-red-50 text-red-700 border-red-200"; if (s === 6) return "bg-red-50 text-red-700 border-red-200"; return "bg-gray-100 text-gray-800"; };
-
-    const handleTrack = async (e) => {
-        e.preventDefault();
-        if (!invoiceId.trim()) { toast.error("Please enter an Invoice ID"); return; }
+    const handleTrack = useCallback(async (id) => {
+        const idToTrack = id || invoiceId;
+        if (!idToTrack.trim()) { toast.error("Please enter an Invoice ID"); return; }
         setLoading(true);
         setOrderData(null);
         setSearched(true);
         try {
-            const response = await trackOrder({ invoice_id: invoiceId.trim() });
+            const response = await trackOrder({ invoice_id: idToTrack.trim() });
             if (response.success && response.data?.data?.length > 0) {
                 setOrderData(response.data.data[0]);
                 toast.success("Order found!");
@@ -96,7 +96,18 @@ export default function TrackOrderPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [invoiceId]);
+
+    useEffect(() => {
+        if (queryInvoiceId) {
+            setInvoiceId(queryInvoiceId);
+            handleTrack(queryInvoiceId);
+        }
+    }, [queryInvoiceId, handleTrack]);
+
+
+    const getStatusLabel = (s) => { s = Number(s); if (s === 1) return "Order Received"; if (s === 2) return "Confirmed"; if (s === 3) return "Processing"; if (s === 4) return "Delivered"; if (s === 5) return "Canceled"; if (s === 6) return "On Hold"; return "Pending"; };
+    const getStatusColor = (s) => { s = Number(s); if (s === 1) return "bg-blue-50 text-blue-700 border-blue-200"; if (s === 2) return "bg-indigo-50 text-indigo-700 border-indigo-200"; if (s === 3) return "bg-purple-50 text-purple-700 border-purple-200"; if (s === 4) return "bg-green-50 text-green-700 border-green-200"; if (s === 5) return "bg-red-50 text-red-700 border-red-200"; if (s === 6) return "bg-red-50 text-red-700 border-red-200"; return "bg-gray-100 text-gray-800"; };
 
     return (
         <div className="min-h-screen bg-gray-50 pb-20 md:pb-10">
@@ -116,7 +127,7 @@ export default function TrackOrderPage() {
             <div className="max-w-4xl mx-auto px-4 md:px-8 -mt-6">
                 {/* Search Card */}
                 <div className="bg-white rounded-2xl shadow-xl p-5 md:p-8 mb-6">
-                    <form onSubmit={handleTrack} className="flex flex-col sm:flex-row gap-3">
+                    <form onSubmit={(e) => { e.preventDefault(); handleTrack(); }} className="flex flex-col sm:flex-row gap-3">
                         <div className="flex-1 relative">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                             <input
@@ -253,5 +264,17 @@ export default function TrackOrderPage() {
                 )}
             </div>
         </div>
+    );
+}
+
+export default function TrackOrderPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-[70vh] flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-red"></div>
+            </div>
+        }>
+            <TrackOrderContent />
+        </Suspense>
     );
 }
